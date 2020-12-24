@@ -132,9 +132,10 @@ public class SwiftWifiIotPlugin: NSObject, FlutterPlugin {
             configuration.joinOnce = bJoinOnce ?? false
 
             NEHotspotConfigurationManager.shared.apply(configuration) { (error) in
+                let ssid = self.getSSID() ?? ""
                 if (error != nil) {
                     if (error?.localizedDescription == "already associated.") {
-                        print("Connected to " + self.getSSID()!)
+                        print("Connected to " + ssid)
                         result(true)
                         return
                     } else {
@@ -143,13 +144,13 @@ public class SwiftWifiIotPlugin: NSObject, FlutterPlugin {
                         return
                     }
                 } else {
-                    if (self.getSSID() == nil) {
+                    if (ssid == "") {
                         print("WiFi network not found")
                         result(false)
                     } else {
-                        print("Connected to " + self.getSSID()!)
+                        print("Connected to " + ssid)
                         // ssid check is required because if wifi not found (could not connect) there seems to be no error given
-                        result(self.getSSID()! == sSSID)
+                        result(ssid == sSSID)
                     }
                     return
                 }
